@@ -1,4 +1,3 @@
-'use client'
 
 import { useState, useRef, FC } from "react";
 import {
@@ -7,19 +6,20 @@ import {
   AnalyzeDocumentCommandInput,
   AnalyzeDocumentCommandOutput,
 } from "@aws-sdk/client-textract";
-import styles from "./page.module.css";
-// import getDocumentQueries, { calculateAge } from "../../utils/getDocumentQueries";
+import styles from "../../app/page.module.css";
+import getDocumentQueries, { calculateAge } from "../../utils/getDocumentQueries";
+import { redirect } from "../../utils/router.functions";
+import { maxPercentTolerant } from "../../constants/keyValues";
 import Image from "next/image";
-import "./pages.css";
+import "../pages.css";
 import axios from "axios";
 import { CAR_BRANDS, CARS_MODELS, CARS_VERSIONS } from "@/constants/carBrands";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { Button, Card, MenuItem, TextField } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import PageviewIcon from '@mui/icons-material/Pageview';
 import { quotesTypes } from "@/constants/quotesTypes";
 import { useForm } from "react-hook-form";
-import getDocumentQueries, { calculateAge } from "@/utils/getDocumentQueries";
 
 interface ImageSch {
   uri: string;
@@ -55,8 +55,8 @@ export default function AnalyzeDocument() {
   const client = new TextractClient({
     region: "us-east-1",
     credentials: {
-      accessKeyId: process.env.GOOGLE_CLIENT_ID || '' ,      
-      secretAccessKey: process.env.NEXT_PUBLIC_SECRET || ''
+      accessKeyId: process.env.NEXT_PUBLIC_ACCESS_KEY || '',
+      secretAccessKey: process.env.NEXT_PUBLIC_SECRET || '',
     },
   });
 
@@ -268,7 +268,7 @@ export default function AnalyzeDocument() {
   };
 
   return (
-    <div className={styles.main} style={{ display: "flex", justifyContent: "space-evenly", flexWrap: 'wrap', gap:'0px', margin: '25px' }}>
+    <div style={{ display: "flex", justifyContent: "space-evenly", flexWrap: 'wrap' }}>
       <h1>Análisis de documentos</h1>
       <div
         style={{
@@ -298,7 +298,7 @@ export default function AnalyzeDocument() {
             ) : (
               <img
                 src={image.uri}
-                style={{ maxWidth: "95%", maxHeight: "95%" }}
+                style={{ maxWidth: "90%", maxHeight: "90%" }}
               />
             )}
             <h4>{image?.file.name}</h4>
